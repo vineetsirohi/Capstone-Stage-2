@@ -67,31 +67,6 @@ public class BaseMainActivity extends AppCompatActivity {
 //        // Create the text view to show the level number.
 //        mLevelTextView = (TextView) findViewById(R.id.level);
 
-//        Credentials credentials = Credentials
-//                .installedApp(RedditCredentials.CLIENT_ID, RedditCredentials.REDIRECT_URL);
-//
-//        final RedditClient reddit = new RedditClient(
-//                UserAgent.of("android:in.vasudev.capstone_stage_2:v0.1"));
-//        reddit.setLoggingMode(LoggingMode.ALWAYS);
-//
-//        new AsyncTask<RedditClient, Void, Void>() {
-//
-//            @Override
-//            protected Void doInBackground(RedditClient... redditClients) {
-//                try {
-//                    Credentials credentials = Credentials.userlessApp(RedditCredentials.CLIENT_ID, UUID.randomUUID());
-//                    OAuthData authData = reddit.getOAuthHelper().easyAuth(credentials);
-//                    reddit.authenticate(authData);
-//                    List<String> me = reddit.getTrendingSubreddits();
-//                    Log.d(TAG, "in.vasudev.capstone_stage_2.BaseMainActivity.doInBackground" + ": me: " + me);
-//
-//                } catch (OAuthException e) {
-//                    e.printStackTrace();
-//                }
-//                return null;
-//            }
-//        }.execute();
-
     }
 
 
