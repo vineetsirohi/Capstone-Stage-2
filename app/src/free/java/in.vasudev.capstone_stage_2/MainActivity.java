@@ -5,7 +5,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 public class MainActivity extends BaseMainActivity {
@@ -16,12 +15,12 @@ public class MainActivity extends BaseMainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mNextLevelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showInterstitial();
-            }
-        });
+//        mNextLevelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showInterstitial();
+//            }
+//        });
 
         // Create the InterstitialAd and set the adUnitId (defined in values/strings.xml).
         mInterstitialAd = newInterstitialAd();
@@ -36,12 +35,12 @@ public class MainActivity extends BaseMainActivity {
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-                mNextLevelButton.setEnabled(true);
+//                mNextLevelButton.setEnabled(true);
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                mNextLevelButton.setEnabled(true);
+//                mNextLevelButton.setEnabled(true);
             }
 
             @Override
@@ -65,7 +64,7 @@ public class MainActivity extends BaseMainActivity {
 
     private void loadInterstitial() {
         // Disable the next level button and load the ad.
-        mNextLevelButton.setEnabled(false);
+//        mNextLevelButton.setEnabled(false);
         AdRequest adRequest = new AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template").build();
         mInterstitialAd.loadAd(adRequest);

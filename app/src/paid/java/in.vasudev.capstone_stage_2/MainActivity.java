@@ -10,13 +10,13 @@ public class MainActivity extends BaseMainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mNextLevelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "This is paid version. No Ads!", Toast.LENGTH_SHORT).show();
-                goToNextLevel();
-            }
-        });
+//        mNextLevelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(MainActivity.this, "This is paid version. No Ads!", Toast.LENGTH_SHORT).show();
+//                goToNextLevel();
+//            }
+//        });
 
     }
 }
