@@ -112,9 +112,9 @@ public class BaseMainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = new RedditPostsFragment();
+            Fragment fragment = new RedditPostsCursorFragment();
             Bundle args = new Bundle();
-            args.putString(RedditPostsFragment.SUBREDDIT, mList.get(i));
+            args.putString(RedditPostsCursorFragment.SUBREDDIT, mList.get(i));
             fragment.setArguments(args);
             return fragment;
         }
