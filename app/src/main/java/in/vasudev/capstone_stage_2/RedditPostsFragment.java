@@ -7,7 +7,8 @@ import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
-import net.dean.jraw.models.Subreddit;
+import net.dean.jraw.models.Submission;
+import net.dean.jraw.paginators.SubredditPaginator;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,7 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 
 /**
  * Created by vineet on 27-Aug-16.
@@ -61,18 +66,28 @@ public class RedditPostsFragment extends Fragment {
                 UserAgent.of("android:in.vasudev.capstone_stage_2:v0.1"));
         reddit.setLoggingMode(LoggingMode.ALWAYS);
 
-        new AsyncTask<RedditClient, Void, Subreddit>() {
+        new AsyncTask<RedditClient, Void, List<Submission>>() {
 
             @Override
-            protected Subreddit doInBackground(RedditClient... redditClients) {
+            protected List<Submission> doInBackground(RedditClient... redditClients) {
                 try {
                     Credentials credentials = Credentials
                             .userlessApp(RedditCredentials.CLIENT_ID, UUID
                                     .randomUUID());
                     OAuthData authData = reddit.getOAuthHelper().easyAuth(credentials);
                     reddit.authenticate(authData);
-                    return reddit.getSubreddit(mSubreddit);
 
+                    SubredditPaginator listings;
+                    if (mSubreddit.toLowerCase().equals("all")) {
+                        listings = new SubredditPaginator(reddit);
+                    } else {
+                        listings = new SubredditPaginator(reddit, mSubreddit);
+                    }
+                    List<Submission> submissions = new ArrayList<>();
+                    for (Submission link : listings.next()) {
+                        submissions.add(link);
+                    }
+                    return submissions;
                 } catch (OAuthException e) {
                     e.printStackTrace();
                 } catch (NetworkException e) {
@@ -82,11 +97,31 @@ public class RedditPostsFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(Subreddit subreddit) {
-                super.onPostExecute(subreddit);
-                if (subreddit != null) {
-
-                    mTextView.setText(subreddit.toString());
+            protected void onPostExecute(List<Submission> submissions) {
+                super.onPostExecute(submissions);
+                if (submissions != null) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (Submission submission : submissions) {
+                        stringBuilder
+                                .append(submission.getThumbnail())
+                                .append("\n")
+                                .append(submission.getPostHint())
+                                .append("\n")
+                                .append(submission.getDomain())
+                                .append("\n")
+                                .append(submission.getTitle())
+                                .append("\n")
+                                .append(submission.getSubredditName()).append(" ")
+                                .append(MyTimeUtils.timeElapsed(submission.getCreated().getTime())).append("  ")
+                                .append(submission.getAuthor())
+                                .append("\n")
+                                .append(submission.getVote().getValue())
+                                .append(submission.getScore()).append("   ")
+                                .append(submission.getCommentCount())
+                                .append("   ")
+                                .append("\n\n");
+                    }
+                    mTextView.setText(stringBuilder.toString());
                 }
             }
         }.execute();
