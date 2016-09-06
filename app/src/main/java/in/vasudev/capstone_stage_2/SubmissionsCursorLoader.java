@@ -48,6 +48,8 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
 
     public static final String COMMENT_COUNT = "comment_count";
 
+    private static final String SHORT_URL = "short_url";
+
     private String mSubreddit;
 
     private Cursor mList;
@@ -81,13 +83,13 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
 
             String[] columns = new String[]{ID, THUMBNAIL, POSTHINT, DOMAIN, TITLE,
                     SUBREDDIT_NAME, CREATED_TIME, AUTHOR, VOTE_VALUE, SCORE,
-                    COMMENT_COUNT};
+                    COMMENT_COUNT, SHORT_URL};
             MatrixCursor matrixCursor = new MatrixCursor(columns);
             for (Submission submission : listings.next()) {
                 matrixCursor.addRow(new Object[]{1, submission.getThumbnail(), submission.getPostHint(),
                         submission.getDomain(), submission.getTitle(), submission.getSubredditName(),
                         submission.getCreated().getTime(), submission.getAuthor(), submission.getVote().getValue(),
-                        submission.getScore(), submission.getCommentCount()});
+                        submission.getScore(), submission.getCommentCount(), submission.getShortURL()});
             }
 
             return matrixCursor;
