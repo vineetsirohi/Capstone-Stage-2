@@ -1,6 +1,7 @@
 package in.vasudev.capstone_stage_2;
 
 import com.devbrackets.android.recyclerext.adapter.RecyclerCursorAdapter;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -14,8 +15,11 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.utils.IntentUtils;
 
 /**
@@ -28,7 +32,8 @@ public class RedditPostsCursorFragment extends Fragment
 
     private String mSubreddit;
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,14 +51,9 @@ public class RedditPostsCursorFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_reddit_posts, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        View view = inflater.inflate(R.layout.fragment_reddit_posts, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -73,8 +73,6 @@ public class RedditPostsCursorFragment extends Fragment
                             StaggeredGridLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(sglm);
         }
-
-
     }
 
     @Override
@@ -89,6 +87,11 @@ public class RedditPostsCursorFragment extends Fragment
         public MyAdapter(Cursor cursor, Activity context) {
             super(cursor);
             mContext = context;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
         }
 
         @Override
@@ -107,39 +110,37 @@ public class RedditPostsCursorFragment extends Fragment
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, Cursor cursor,
+        public void onBindViewHolder(final ViewHolder holder, Cursor cursor,
                 int position) {
             holder.itemView.setTag(position);
-            cursor.moveToPosition(position);
             holder.titleView.setText(cursor.getString(4));
-//            holder.subtitleView.setText(
-//                    DateUtils.getRelativeTimeSpanString(
-//                            mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
-//                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-//                            DateUtils.FORMAT_ABBREV_ALL).toString()
-//                            + " by "
-//                            + mCursor.getString(ArticleLoader.Query.AUTHOR));
-//            holder.thumbnailView.setImageUrl(
-//                    mCursor.getString(ArticleLoader.Query.THUMB_URL),
-//                    ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-//            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
-        }
+            holder.subredditNameView.setText(cursor.getString(5));
 
+            holder.thumbnailView.setVisibility(View.VISIBLE);
+            String url = cursor.getString(1);
+            if (url != null) {
+                Picasso.with(mContext)
+                        .load(url)
+                        .into(holder.thumbnailView);
+            } else {
+                holder.thumbnailView.setVisibility(View.GONE);
+            }
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-//        public DynamicHeightNetworkImageView thumbnailView;
+        public ImageView thumbnailView;
 
         public TextView titleView;
 
-//        public TextView subtitleView;
+        public TextView subredditNameView;
 
         public ViewHolder(View view) {
             super(view);
-//            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById(R.id.thumbnail);
-            titleView = (TextView) view.findViewById(R.id.text);
-//            subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
+            thumbnailView = (ImageView) view.findViewById(R.id.thumbnail);
+            titleView = (TextView) view.findViewById(R.id.title);
+            subredditNameView = (TextView) view.findViewById(R.id.subreddit_name);
         }
     }
 }

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
@@ -53,8 +54,10 @@ dependencies {
 
     freeCompile 'com.google.android.gms:play-services-ads:9.2.0'
 
-    compile 'com.jakewharton:butterknife:8.2.1'
-//    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.volley:volley:1.0.0'
 
     compile "net.dean.jraw:JRAW:0.9.0"

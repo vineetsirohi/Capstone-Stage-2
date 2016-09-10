@@ -85,8 +85,9 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
                     SUBREDDIT_NAME, CREATED_TIME, AUTHOR, VOTE_VALUE, SCORE,
                     COMMENT_COUNT, SHORT_URL};
             MatrixCursor matrixCursor = new MatrixCursor(columns);
+            int id=0;
             for (Submission submission : listings.next()) {
-                matrixCursor.addRow(new Object[]{1, submission.getThumbnail(), submission.getPostHint(),
+                matrixCursor.addRow(new Object[]{id++, submission.getThumbnail(), submission.getPostHint(),
                         submission.getDomain(), submission.getTitle(), submission.getSubredditName(),
                         submission.getCreated().getTime(), submission.getAuthor(), submission.getVote().getValue(),
                         submission.getScore(), submission.getCommentCount(), submission.getShortURL()});

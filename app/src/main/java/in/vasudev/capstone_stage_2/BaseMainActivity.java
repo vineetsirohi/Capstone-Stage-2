@@ -17,31 +17,29 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class BaseMainActivity extends AppCompatActivity {
 
     private static final String TAG = "BaseMainActivity";
 
-//    private int mLevel = 1;
+    @BindView(R.id.my_toolbar)
+    Toolbar mToolbar;
 
-//    protected Button mNextLevelButton;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
 
-//    private TextView mLevelTextView;
-
-    private Toolbar mToolbar;
-
-    private DrawerLayout mDrawerLayout;
-
-    private ViewPager mViewPager;
+    @BindView(R.id.pager)
+    ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -51,7 +49,6 @@ public class BaseMainActivity extends AppCompatActivity {
             }
         });
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.setAdapter(
                 new NewsfeedViewPagerAdapter(getSupportFragmentManager()));
@@ -60,12 +57,6 @@ public class BaseMainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-//        // Create the next level button, which tries to show an interstitial when clicked.
-//        mNextLevelButton = ((Button) findViewById(R.id.next_level_button));
-//
-//        // Create the text view to show the level number.
-//        mLevelTextView = (TextView) findViewById(R.id.level);
 
     }
 
