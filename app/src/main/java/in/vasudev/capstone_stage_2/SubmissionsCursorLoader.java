@@ -21,38 +21,18 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.UUID;
 
+import in.vasudev.capstone_stage_2.model.SubmissionModel;
+
 /**
  * Created by vineet on 20/05/2015.
  */
 public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
 
-    public static final String ID = "_id";
-
-    public static final String THUMBNAIL = "thumbnail";
-
-    public static final String POSTHINT = "posthint";
-
-    public static final String DOMAIN = "domain";
-
-    public static final String TITLE = "title";
-
-    public static final String SUBREDDIT_NAME = "subreddit_name";
-
-    public static final String CREATED_TIME = "created_time";
-
-    public static final String AUTHOR = "author";
-
-    public static final String VOTE_VALUE = "vote_value";
-
-    public static final String SCORE = "score";
-
-    public static final String COMMENT_COUNT = "comment_count";
-
-    private static final String SHORT_URL = "short_url";
-
     private String mSubreddit;
 
     private Cursor mList;
+
+
 
     public SubmissionsCursorLoader(Context context, String subreddit) {
         super(context);
@@ -81,10 +61,7 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
                 listings = new SubredditPaginator(reddit, mSubreddit);
             }
 
-            String[] columns = new String[]{ID, THUMBNAIL, POSTHINT, DOMAIN, TITLE,
-                    SUBREDDIT_NAME, CREATED_TIME, AUTHOR, VOTE_VALUE, SCORE,
-                    COMMENT_COUNT, SHORT_URL};
-            MatrixCursor matrixCursor = new MatrixCursor(columns);
+            MatrixCursor matrixCursor = new MatrixCursor(SubmissionModel.COLUMNS);
             int id=0;
             for (Submission submission : listings.next()) {
                 matrixCursor.addRow(new Object[]{id++, submission.getThumbnail(), submission.getPostHint(),

@@ -20,7 +20,9 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.utils.IntentUtils;
+import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 
 /**
  * Created by vineet on 27-Aug-16.
@@ -82,6 +84,8 @@ public class RedditPostsCursorFragment extends Fragment
 
     private class MyAdapter extends RecyclerCursorAdapter<ViewHolder> {
 
+        private static final String SPACE = "  ";
+
         private Activity mContext;
 
         public MyAdapter(Cursor cursor, Activity context) {
@@ -113,11 +117,28 @@ public class RedditPostsCursorFragment extends Fragment
         public void onBindViewHolder(final ViewHolder holder, Cursor cursor,
                 int position) {
             holder.itemView.setTag(position);
-            holder.titleView.setText(cursor.getString(4));
-            holder.subredditNameView.setText(cursor.getString(5));
+            holder.titleView.setText(
+                    cursor.getString(SubmissionModel.getColumnIndex(SubmissionModel.TITLE)));
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("r/")
+                    .append(cursor.getString(SubmissionModel.getColumnIndex(SubmissionModel.SUBREDDIT_NAME)))
+                    .append(SPACE).append(mContext.getString(R.string.bullet_point)).append(SPACE)
+                    .append(MyTimeUtils.timeElapsed(cursor.getLong(SubmissionModel.getColumnIndex(SubmissionModel.CREATED_TIME))))
+                    .append(SPACE).append(mContext.getString(R.string.bullet_point)).append(SPACE)
+                    .append("u/")
+                    .append(cursor
+                            .getString(SubmissionModel.getColumnIndex(SubmissionModel.AUTHOR)));
+            holder.subtextView.setText(stringBuilder.toString());
+
+            holder.upvotesView.setText(cursor
+                    .getString(SubmissionModel.getColumnIndex(SubmissionModel.SCORE)));
+            holder.commentsView.setText(cursor
+                    .getString(SubmissionModel.getColumnIndex(SubmissionModel.COMMENT_COUNT)));
 
             holder.thumbnailView.setVisibility(View.VISIBLE);
-            String url = cursor.getString(1);
+            String url = cursor
+                    .getString(SubmissionModel.getColumnIndex(SubmissionModel.THUMBNAIL));
             if (url != null) {
                 Picasso.with(mContext)
                         .load(url)
@@ -130,17 +151,24 @@ public class RedditPostsCursorFragment extends Fragment
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView thumbnailView;
+        @BindView(R.id.thumbnail)
+        ImageView thumbnailView;
 
-        public TextView titleView;
+        @BindView(R.id.title)
+        TextView titleView;
 
-        public TextView subredditNameView;
+        @BindView(R.id.subtext)
+        TextView subtextView;
+
+        @BindView(R.id.upvotes_text)
+        TextView upvotesView;
+
+        @BindView(R.id.comments_text)
+        TextView commentsView;
 
         public ViewHolder(View view) {
             super(view);
-            thumbnailView = (ImageView) view.findViewById(R.id.thumbnail);
-            titleView = (TextView) view.findViewById(R.id.title);
-            subredditNameView = (TextView) view.findViewById(R.id.subreddit_name);
+            ButterKnife.bind(this, view);
         }
     }
 }
