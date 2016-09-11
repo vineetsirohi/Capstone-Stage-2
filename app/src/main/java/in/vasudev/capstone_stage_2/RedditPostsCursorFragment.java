@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.utils.IntentUtils;
 import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
+import in.vasudev.capstone_stage_2.utils.StringUtils;
 
 /**
  * Created by vineet on 27-Aug-16.
@@ -84,8 +85,6 @@ public class RedditPostsCursorFragment extends Fragment
 
     private class MyAdapter extends RecyclerCursorAdapter<ViewHolder> {
 
-        private static final String SPACE = "  ";
-
         private Activity mContext;
 
         public MyAdapter(Cursor cursor, Activity context) {
@@ -123,9 +122,9 @@ public class RedditPostsCursorFragment extends Fragment
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("r/")
                     .append(cursor.getString(SubmissionModel.getColumnIndex(SubmissionModel.SUBREDDIT_NAME)))
-                    .append(SPACE).append(mContext.getString(R.string.bullet_point)).append(SPACE)
+                    .append(StringUtils.SPACE).append(mContext.getString(R.string.bullet_point)).append(StringUtils.SPACE)
                     .append(MyTimeUtils.timeElapsed(cursor.getLong(SubmissionModel.getColumnIndex(SubmissionModel.CREATED_TIME))))
-                    .append(SPACE).append(mContext.getString(R.string.bullet_point)).append(SPACE)
+                    .append(StringUtils.SPACE).append(mContext.getString(R.string.bullet_point)).append(StringUtils.SPACE)
                     .append("u/")
                     .append(cursor
                             .getString(SubmissionModel.getColumnIndex(SubmissionModel.AUTHOR)));

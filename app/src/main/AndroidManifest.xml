@@ -24,6 +24,23 @@
             </intent-filter>
         </activity>
 
+        <provider
+                android:authorities="in.vasudev.capstone_stage_2.submissions_provider.authority"
+                android:name="in.vasudev.capstone_stage_2.model.SubmissionsProvider"
+                android:exported="true"/>
+
+        <receiver android:name=".appwidget.MyAppWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/my_appwidget_info" />
+        </receiver>
+
+        <service
+                android:name=".appwidget.AppWidgetRemoteViewsService"
+                android:exported="false"
+                android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>

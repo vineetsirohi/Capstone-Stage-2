@@ -22,6 +22,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import java.util.UUID;
 
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
+import in.vasudev.capstone_stage_2.model.SubmissionsTable;
 
 /**
  * Created by vineet on 20/05/2015.
@@ -56,6 +57,7 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
             SubredditPaginator listings;
             if (mSubreddit.toLowerCase().equals("all")) {
                 listings = new SubredditPaginator(reddit);
+                getContext().getContentResolver().delete(SubmissionsTable.CONTENT_URI, null, null);
             } else {
                 listings = new SubredditPaginator(reddit, mSubreddit);
             }
@@ -71,6 +73,12 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
                         submission.getVote().getValue(),
                         submission.getScore(), submission.getCommentCount(),
                         submission.getShortURL()});
+
+                if (mSubreddit.toLowerCase().equals("all")) {
+                    getContext().getContentResolver().insert(SubmissionsTable.CONTENT_URI,
+                            SubmissionsTable
+                                    .getContentValues(new SubmissionModel(submission), false));
+                }
             }
 
             return matrixCursor;
