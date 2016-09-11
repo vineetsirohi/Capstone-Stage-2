@@ -1,7 +1,5 @@
 package in.vasudev.capstone_stage_2.model;
 
-import android.text.Html;
-
 import java.util.Arrays;
 
 /**
@@ -33,12 +31,9 @@ public class SubmissionModel {
 
     private static final String SHORT_URL = "short_url";
 
-//    public static final String BULLET_POINT = Html.fromHtml("\\u2022", ); //&#8226
-
     public static final String[] COLUMNS = new String[]{ID, THUMBNAIL, POSTHINT, DOMAIN, TITLE,
             SUBREDDIT_NAME, CREATED_TIME, AUTHOR, VOTE_VALUE, SCORE,
             COMMENT_COUNT, SHORT_URL};
-
 
     public static int getColumnIndex(String columnName) {
         return Arrays.asList(COLUMNS).indexOf(columnName);

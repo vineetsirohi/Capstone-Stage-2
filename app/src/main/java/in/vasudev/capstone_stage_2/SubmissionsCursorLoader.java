@@ -33,7 +33,6 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
     private Cursor mList;
 
 
-
     public SubmissionsCursorLoader(Context context, String subreddit) {
         super(context);
         mSubreddit = subreddit;
@@ -62,12 +61,16 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
             }
 
             MatrixCursor matrixCursor = new MatrixCursor(SubmissionModel.COLUMNS);
-            int id=0;
+            int id = 0;
             for (Submission submission : listings.next()) {
-                matrixCursor.addRow(new Object[]{id++, submission.getThumbnail(), submission.getPostHint(),
-                        submission.getDomain(), submission.getTitle(), submission.getSubredditName(),
-                        submission.getCreated().getTime(), submission.getAuthor(), submission.getVote().getValue(),
-                        submission.getScore(), submission.getCommentCount(), submission.getShortURL()});
+                matrixCursor.addRow(new Object[]{id++, submission.getThumbnail(),
+                        submission.getPostHint(),
+                        submission.getDomain(), submission.getTitle(),
+                        submission.getSubredditName(),
+                        submission.getCreated().getTime(), submission.getAuthor(),
+                        submission.getVote().getValue(),
+                        submission.getScore(), submission.getCommentCount(),
+                        submission.getShortURL()});
             }
 
             return matrixCursor;
