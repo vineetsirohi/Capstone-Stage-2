@@ -5,6 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <!--android:id="@+id/appwidget_item_view"-->
 
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -20,7 +21,17 @@
               android:paddingTop="16dp"
               android:paddingBottom="16dp"
     />
-
+    <TextView android:id="@+id/empty_view"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:text="@string/no_items"
+              style="@style/Base.TextAppearance.AppCompat.Body1"
+              android:background="@color/white"
+              android:textColor="@color/colorAccent"
+              android:textSize="24sp"
+              android:gravity="center"
+              tools:visibility="gone"
+    />
     <ListView
             android:id="@+id/widget_list"
             android:layout_width="match_parent"
@@ -28,7 +39,10 @@
             android:divider="@null"
             android:dividerHeight="0dp"
             tools:listitem="@layout/list_item_appwidget"
-            android:background="#ffffff"
+            android:background="@color/white"
             android:theme="@style/AppTheme"
-    />
+    >
+    </ListView>
+
+
 </LinearLayout>

@@ -35,7 +35,7 @@ public class SubmissionModel {
 
     public static final String COMMENT_COUNT = "comment_count";
 
-    private static final String SHORT_URL = "short_url";
+    public static final String SHORT_URL = "short_url";
 
     public static final String[] COLUMNS = new String[]{ID, THUMBNAIL, POSTHINT, DOMAIN, TITLE,
             SUBREDDIT_NAME, CREATED_TIME, AUTHOR, VOTE_VALUE, SCORE,

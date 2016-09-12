@@ -105,7 +105,7 @@ public class RedditPostsCursorFragment extends Fragment
                 @Override
                 public void onClick(View view) {
                     getCursor().moveToPosition((Integer) view.getTag());
-                    IntentUtils.openWebPage(mContext, getCursor().getString(11));
+                    IntentUtils.openWebPage(mContext, getCursor().getString(SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)));
                 }
             });
             final ViewHolder vh = new ViewHolder(view);

@@ -1,93 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/appwidget_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         style="@style/Theme.AppCompat.Light">
 
     <include layout="@layout/list_item_content"/>
-
-    <!--<ImageView android:id="@+id/thumbnail"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:src="@drawable/empty_detail"-->
-    <!--android:adjustViewBounds="true"-->
-    <!--android:scaleType="fitCenter"/>-->
-
-    <!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--style="@style/TextAppearance.AppCompat.Title"-->
-    <!--android:id="@+id/title"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingLeft="@dimen/left_padding"-->
-    <!--android:paddingStart="@dimen/left_padding"-->
-    <!--android:paddingRight="@dimen/right_padding"-->
-    <!--android:paddingEnd="@dimen/right_padding"-->
-    <!--android:paddingTop="20dp"-->
-    <!--android:paddingBottom="8dp"-->
-    <!--android:ellipsize="end"-->
-    <!--android:maxLines="4"-->
-    <!--android:textSize="20sp"-->
-    <!--tools:text="A Flatiron State of Mind"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/subtext"-->
-    <!--style="@style/TextAppearance.AppCompat.Caption"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingLeft="@dimen/left_padding"-->
-    <!--android:paddingStart="@dimen/left_padding"-->
-    <!--android:paddingRight="@dimen/right_padding"-->
-    <!--android:paddingEnd="@dimen/right_padding"-->
-    <!--android:paddingBottom="8dp"-->
-    <!--android:textSize="14sp"-->
-    <!--tools:text="r/movies &#8226; 4h &#8226; TheEagles"/>-->
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingLeft="@dimen/left_padding"-->
-    <!--android:paddingStart="@dimen/left_padding"-->
-    <!--android:paddingRight="@dimen/right_padding"-->
-    <!--android:paddingEnd="@dimen/right_padding"-->
-    <!--android:paddingBottom="24dp">-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/up_arrow"-->
-    <!--android:layout_width="20dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:src="@drawable/ic_up_arrow"-->
-    <!--android:scaleType="fitCenter"-->
-    <!--/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/upvotes_text"-->
-    <!--style="@style/TextAppearance.AppCompat.Subhead"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textSize="14sp"-->
-    <!--tools:text="472"/>-->
-
-    <!--<ImageView-->
-    <!--android:id="@+id/comments"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:paddingLeft="4dp"-->
-    <!--android:scaleType="fitEnd"-->
-    <!--android:src="@drawable/ic_comments"-->
-    <!--/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/comments_text"-->
-    <!--style="@style/TextAppearance.AppCompat.Subhead"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:paddingLeft="4dp"-->
-    <!--android:paddingRight="16dp"-->
-    <!--android:textSize="14sp"-->
-    <!--tools:text="72"/>-->
-
-    <!--</LinearLayout>-->
 
 </LinearLayout>

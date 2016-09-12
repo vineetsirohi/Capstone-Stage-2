@@ -4,5 +4,6 @@
     <string name="action_settings">Settings</string>
 
     <string name="bullet_point">&#8226;</string>
+    <string name="no_items">No items!</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -12,6 +13,7 @@ import android.widget.RemoteViewsService;
 import in.vasudev.capstone_stage_2.R;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
+import in.vasudev.capstone_stage_2.utils.IntentUtils;
 import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 import in.vasudev.capstone_stage_2.utils.StringUtils;
 
@@ -84,7 +86,7 @@ public class AppWidgetRemoteViewsService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int position) {
-            final RemoteViews remoteView = new RemoteViews(context.getPackageName(),
+            final RemoteViews rv = new RemoteViews(context.getPackageName(),
                     R.layout.list_item_appwidget);
 
             if (mCursor.moveToPosition(position)) {
@@ -93,7 +95,7 @@ public class AppWidgetRemoteViewsService extends RemoteViewsService {
                 Log.d(LOG_TAG,
                         "in.vasudev.capstone_stage_2.appwidget.AppWidgetRemoteViewsService.ListProvider.getViewAt "
                                 + title);
-                remoteView.setTextViewText(R.id.title, title);
+                rv.setTextViewText(R.id.title, title);
 
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("r/")
@@ -106,26 +108,35 @@ public class AppWidgetRemoteViewsService extends RemoteViewsService {
                         .append("u/")
                         .append(mCursor
                                 .getString(SubmissionModel.getColumnIndex(SubmissionModel.AUTHOR)));
-                remoteView.setTextViewText(R.id.subtext, stringBuilder.toString());
+                rv.setTextViewText(R.id.subtext, stringBuilder.toString());
 
-                remoteView.setTextViewText(R.id.upvotes_text, mCursor
+                rv.setTextViewText(R.id.upvotes_text, mCursor
                         .getString(SubmissionModel.getColumnIndex(SubmissionModel.SCORE)));
-                remoteView.setTextViewText(R.id.comments_text, mCursor
+                rv.setTextViewText(R.id.comments_text, mCursor
                         .getString(SubmissionModel.getColumnIndex(SubmissionModel.COMMENT_COUNT)));
 
-//                remoteView.setViewVisibility(R.id.thumbnail, View.VISIBLE);
+//                rv.setViewVisibility(R.id.thumbnail, View.VISIBLE);
 //                String url = mCursor
 //                        .getString(SubmissionModel.getColumnIndex(SubmissionModel.THUMBNAIL));
 //                if (url != null) {
 //                    Picasso.with(context)
 //                            .load(url)
-//                            .into(remoteView, R.id.thumbnail, new int[]{appWidgetId});
+//                            .into(rv, R.id.thumbnail, new int[]{appWidgetId});
 //                } else {
-                    remoteView.setViewVisibility(R.id.thumbnail, View.GONE);
+                    rv.setViewVisibility(R.id.thumbnail, View.GONE);
 //                }
+
+//Fill in intent
+                Bundle extras = new Bundle();
+                extras.putString(IntentUtils.EXTRA_URL, mCursor.getString(SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)));
+                Intent fillInIntent = new Intent();
+                fillInIntent.putExtras(extras);
+                // Make it possible to distinguish the individual on-click
+                // action of a given item
+                rv.setOnClickFillInIntent(R.id.appwidget_item, fillInIntent);
             }
 
-            return remoteView;
+            return rv;
         }
 
         @Override
