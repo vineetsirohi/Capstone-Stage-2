@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -40,6 +41,9 @@ public class RedditPostsCursorFragment extends Fragment
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,13 @@ public class RedditPostsCursorFragment extends Fragment
             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reddit_posts, container, false);
         ButterKnife.bind(this, view);
+
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getLoaderManager().restartLoader(0, null, RedditPostsCursorFragment.this);
+            }
+        });
         return view;
     }
 
@@ -69,16 +80,39 @@ public class RedditPostsCursorFragment extends Fragment
                     .query(SubmissionsTable.CONTENT_URI, null, null, null, null);
             setUpAdapter(cursor);
         }
+        showRefreshing(true);
+    }
+
+    private void showRefreshing(final boolean refreshing) {
+        mSwipeView.post(new Runnable() {
+        @Override
+        public void run() {
+            mSwipeView.setRefreshing(refreshing);
+        }
+    });
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mSwipeView != null) {
+            mSwipeView.setRefreshing(false);
+            mSwipeView.destroyDrawingCache();
+            mSwipeView.clearAnimation();
+        }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        showRefreshing(true);
         return new SubmissionsCursorLoader(getActivity(), mSubreddit);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         setUpAdapter(data);
+        showRefreshing(false);
     }
 
     private void setUpAdapter(Cursor cursor) {

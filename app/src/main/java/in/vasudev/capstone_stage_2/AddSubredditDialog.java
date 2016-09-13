@@ -4,7 +4,6 @@ import net.dean.jraw.RedditClient;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -25,15 +24,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.vasudev.capstone_stage_2.model.SubredditsModel;
-import in.vasudev.capstone_stage_2.model.SubredditsTable;
-
 /**
  * Created by vineet on 13-Sep-16.
  */
 public class AddSubredditDialog extends DialogFragment {
-
-    private Thread mThread;
 
     private MyListAdapter mAdapter;
 
