@@ -5,5 +5,8 @@
 
     <string name="bullet_point">&#8226;</string>
     <string name="no_items">No items!</string>
+    <string name="action_share">Share</string>
+    <string name="hey_checkout_reddit_post">Hey! Check out this cool reddit post\n\n</string>
+    <string name="reddit_post">Reddit post</string>
 
 </resources>
