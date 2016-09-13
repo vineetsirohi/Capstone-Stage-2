@@ -49,21 +49,24 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
             MatrixCursor matrixCursor = new MatrixCursor(SubmissionModel.COLUMNS);
             int id = 0;
             for (Submission submission : listings.next()) {
-                matrixCursor.addRow(new Object[]{id, submission.getThumbnail(),
-                        submission.getPostHint(),
-                        submission.getDomain(), submission.getTitle(),
-                        submission.getSubredditName(),
-                        submission.getCreated().getTime(), submission.getAuthor(),
-                        submission.getVote().getValue(),
-                        submission.getScore(), submission.getCommentCount(),
-                        submission.getShortURL()});
+                if(!submission.isNsfw()) {
+                    matrixCursor.addRow(new Object[]{id, submission.getThumbnail(),
+                            submission.getPostHint(),
+                            submission.getDomain(), submission.getTitle(),
+                            submission.getSubredditName(),
+                            submission.getCreated().getTime(), submission.getAuthor(),
+                            submission.getVote().getValue(),
+                            submission.getScore(), submission.getCommentCount(),
+                            submission.getShortURL()});
 
-                if (mSubreddit.toLowerCase().equals("all")) {
-                    getContext().getContentResolver().insert(SubmissionsTable.CONTENT_URI,
-                            SubmissionsTable
-                                    .getContentValues(new SubmissionModel(id, submission), false));
+                    if (mSubreddit.toLowerCase().equals("all")) {
+                        getContext().getContentResolver().insert(SubmissionsTable.CONTENT_URI,
+                                SubmissionsTable
+                                        .getContentValues(new SubmissionModel(id, submission),
+                                                false));
+                    }
+                    id++;
                 }
-                id++;
             }
 
             return matrixCursor;
