@@ -59,10 +59,12 @@ public class MyApp extends Application {
         } catch (OAuthException e) {
             e.printStackTrace();
         } catch (NetworkException e) {
-
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return null;
+        return mReddit;
     }
 
 }

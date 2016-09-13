@@ -14,5 +14,6 @@
     <string name="action_add_subreddit">Add Subreddit</string>
     <string name="topic">Topic</string>
     <string name="app_icon">App icon</string>
+    <string name="network_toast">Uh-oh! This app requires an internet connection</string>
 
 </resources>

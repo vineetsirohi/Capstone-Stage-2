@@ -4,7 +4,10 @@ import com.devbrackets.android.recyclerext.adapter.RecyclerCursorAdapter;
 import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,8 +29,8 @@ import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
 import in.vasudev.capstone_stage_2.model.SubredditsModel;
 import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
-import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 import in.vasudev.capstone_stage_2.utils.MyStringUtils;
+import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 
 /**
  * Created by vineet on 27-Aug-16.
@@ -62,7 +66,6 @@ public class RedditPostsCursorFragment extends Fragment
             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reddit_posts, container, false);
         ButterKnife.bind(this, view);
-
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -80,16 +83,28 @@ public class RedditPostsCursorFragment extends Fragment
                     .query(SubmissionsTable.CONTENT_URI, null, null, null, null);
             setUpAdapter(cursor);
         }
-        showRefreshing(true);
+
+        if (isConnected()) {
+            showRefreshing(true);
+        } else {
+            Toast.makeText(getActivity(), R.string.network_toast, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     private void showRefreshing(final boolean refreshing) {
         mSwipeView.post(new Runnable() {
-        @Override
-        public void run() {
-            mSwipeView.setRefreshing(refreshing);
-        }
-    });
+            @Override
+            public void run() {
+                mSwipeView.setRefreshing(refreshing);
+            }
+        });
 
     }
 
@@ -158,7 +173,7 @@ public class RedditPostsCursorFragment extends Fragment
                 public void onClick(View view) {
                     getCursor().moveToPosition((Integer) view.getTag());
 
-                        MyIntentUtils.openWebPage(mContext,
+                    MyIntentUtils.openWebPage(mContext,
                             getCursor().getString(
                                     SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)),
                             getCursor().getString(
