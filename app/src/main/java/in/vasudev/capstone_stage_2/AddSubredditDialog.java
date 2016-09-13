@@ -1,7 +1,5 @@
 package in.vasudev.capstone_stage_2;
 
-import net.dean.jraw.RedditClient;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -37,14 +35,13 @@ public class AddSubredditDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final FragmentActivity activity = getActivity();
-        final RedditClient redditClient = MyApp.getRedditClient();
 
         LayoutInflater layoutInflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.dialog_add_subreddit, null);
 
         ListView listView = (ListView) view.findViewById(R.id.listView);
-        mAdapter = new MyListAdapter(getActivity(), new ArrayList<String>(), redditClient);
+        mAdapter = new MyListAdapter(getActivity(), new ArrayList<String>());
         listView.setAdapter(mAdapter);
 
         EditText editText = (EditText) view.findViewById(R.id.editText);
@@ -95,11 +92,8 @@ public class AddSubredditDialog extends DialogFragment {
 
         private SubredditsFilter mFilter;
 
-        private RedditClient mRedditClient;
-
-        MyListAdapter(Context context, List<String> subreddits, RedditClient redditClient) {
+        MyListAdapter(Context context, List<String> subreddits) {
             mSubreddits = subreddits;
-            mRedditClient = redditClient;
             mInflater = LayoutInflater.from(context);
         }
 
@@ -157,8 +151,8 @@ public class AddSubredditDialog extends DialogFragment {
                 filterResults.values = new ArrayList<String>();
                 filterResults.count = 0;
 
-                if (mRedditClient != null) {
-                    List<String> subredditsByTopic = mRedditClient.getSubredditsByTopic(
+                if (MyApp.getRedditClient().isAuthenticated()) {
+                    List<String> subredditsByTopic = MyApp.getRedditClient().getSubredditsByTopic(
                             String.valueOf(charSequence));
                     filterResults.values = subredditsByTopic;
                     filterResults.count = subredditsByTopic.size();

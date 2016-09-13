@@ -78,7 +78,7 @@ public class RedditPostsCursorFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (SubredditsModel.DEFAULT_SUB_ALL.equals(mSubreddit)) {
+        if (SubredditsModel.DEFAULT_SUB_ALL.equals(mSubreddit.toLowerCase())) {
             Cursor cursor = getActivity().getContentResolver()
                     .query(SubmissionsTable.CONTENT_URI, null, null, null, null);
             setUpAdapter(cursor);
@@ -87,6 +87,7 @@ public class RedditPostsCursorFragment extends Fragment
         if (isConnected()) {
             showRefreshing(true);
         } else {
+            showRefreshing(false);
             Toast.makeText(getActivity(), R.string.network_toast, Toast.LENGTH_SHORT).show();
         }
     }
