@@ -13,9 +13,9 @@ import android.widget.RemoteViewsService;
 import in.vasudev.capstone_stage_2.R;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
-import in.vasudev.capstone_stage_2.utils.IntentUtils;
+import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
-import in.vasudev.capstone_stage_2.utils.StringUtils;
+import in.vasudev.capstone_stage_2.utils.MyStringUtils;
 
 /**
  * Created by vineet on 11-Sep-16.
@@ -101,10 +101,12 @@ public class AppWidgetRemoteViewsService extends RemoteViewsService {
                 stringBuilder.append("r/")
                         .append(mCursor.getString(
                                 SubmissionModel.getColumnIndex(SubmissionModel.SUBREDDIT_NAME)))
-                        .append(StringUtils.SPACE).append(context.getString(R.string.bullet_point)).append(StringUtils.SPACE)
+                        .append(MyStringUtils.SPACE).append(context.getString(R.string.bullet_point)).append(
+                        MyStringUtils.SPACE)
                         .append(MyTimeUtils.timeElapsed(mCursor.getLong(
                                 SubmissionModel.getColumnIndex(SubmissionModel.CREATED_TIME))))
-                        .append(StringUtils.SPACE).append(context.getString(R.string.bullet_point)).append(StringUtils.SPACE)
+                        .append(MyStringUtils.SPACE).append(context.getString(R.string.bullet_point)).append(
+                        MyStringUtils.SPACE)
                         .append("u/")
                         .append(mCursor
                                 .getString(SubmissionModel.getColumnIndex(SubmissionModel.AUTHOR)));
@@ -128,7 +130,9 @@ public class AppWidgetRemoteViewsService extends RemoteViewsService {
 
 //Fill in intent
                 Bundle extras = new Bundle();
-                extras.putString(IntentUtils.EXTRA_URL, mCursor.getString(SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)));
+                extras.putString(MyIntentUtils.EXTRA_URL, mCursor.getString(SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)));
+                extras.putString(MyIntentUtils.EXTRA_TITLE, mCursor.getString(
+                        SubmissionModel.getColumnIndex(SubmissionModel.TITLE)));
                 Intent fillInIntent = new Intent();
                 fillInIntent.putExtras(extras);
                 // Make it possible to distinguish the individual on-click

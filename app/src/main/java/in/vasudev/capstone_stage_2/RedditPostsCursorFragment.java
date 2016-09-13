@@ -21,9 +21,10 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
-import in.vasudev.capstone_stage_2.utils.IntentUtils;
+import in.vasudev.capstone_stage_2.model.SubmissionsTable;
+import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
-import in.vasudev.capstone_stage_2.utils.StringUtils;
+import in.vasudev.capstone_stage_2.utils.MyStringUtils;
 
 /**
  * Created by vineet on 27-Aug-16.
@@ -60,22 +61,36 @@ public class RedditPostsCursorFragment extends Fragment
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Cursor cursor = getActivity().getContentResolver()
+                .query(SubmissionsTable.CONTENT_URI, null, null, null, null);
+        setUpAdapter(cursor);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new SubmissionsCursorLoader(getActivity(), mSubreddit);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null) {
-            RecyclerView.Adapter adapter = new MyAdapter(data, getActivity());
-            adapter.setHasStableIds(true);
-            mRecyclerView.setAdapter(adapter);
-            int columnCount = getResources().getInteger(R.integer.list_column_count);
-            StaggeredGridLayoutManager sglm =
-                    new StaggeredGridLayoutManager(columnCount,
-                            StaggeredGridLayoutManager.VERTICAL);
-            mRecyclerView.setLayoutManager(sglm);
+        setUpAdapter(data);
+    }
+
+    private void setUpAdapter(Cursor cursor) {
+        if (cursor == null) {
+            return;
         }
+
+        RecyclerView.Adapter adapter = new MyAdapter(cursor, getActivity());
+        adapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(adapter);
+        int columnCount = getResources().getInteger(R.integer.list_column_count);
+        StaggeredGridLayoutManager sglm =
+                new StaggeredGridLayoutManager(columnCount,
+                        StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(sglm);
     }
 
     @Override
@@ -105,7 +120,10 @@ public class RedditPostsCursorFragment extends Fragment
                 @Override
                 public void onClick(View view) {
                     getCursor().moveToPosition((Integer) view.getTag());
-                    IntentUtils.openWebPage(mContext, getCursor().getString(SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)));
+                    MyIntentUtils.openWebPage(mContext,
+                            getCursor().getString(
+                                    SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)),
+                            getCursor().getString(SubmissionModel.getColumnIndex(SubmissionModel.TITLE)));
                 }
             });
             final ViewHolder vh = new ViewHolder(view);
@@ -121,10 +139,14 @@ public class RedditPostsCursorFragment extends Fragment
 
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("r/")
-                    .append(cursor.getString(SubmissionModel.getColumnIndex(SubmissionModel.SUBREDDIT_NAME)))
-                    .append(StringUtils.SPACE).append(mContext.getString(R.string.bullet_point)).append(StringUtils.SPACE)
-                    .append(MyTimeUtils.timeElapsed(cursor.getLong(SubmissionModel.getColumnIndex(SubmissionModel.CREATED_TIME))))
-                    .append(StringUtils.SPACE).append(mContext.getString(R.string.bullet_point)).append(StringUtils.SPACE)
+                    .append(cursor.getString(
+                            SubmissionModel.getColumnIndex(SubmissionModel.SUBREDDIT_NAME)))
+                    .append(MyStringUtils.SPACE).append(mContext.getString(R.string.bullet_point))
+                    .append(MyStringUtils.SPACE)
+                    .append(MyTimeUtils.timeElapsed(cursor.getLong(
+                            SubmissionModel.getColumnIndex(SubmissionModel.CREATED_TIME))))
+                    .append(MyStringUtils.SPACE).append(mContext.getString(R.string.bullet_point))
+                    .append(MyStringUtils.SPACE)
                     .append("u/")
                     .append(cursor
                             .getString(SubmissionModel.getColumnIndex(SubmissionModel.AUTHOR)));

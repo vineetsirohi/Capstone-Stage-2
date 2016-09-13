@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -18,11 +16,11 @@ import android.widget.ProgressBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
+import in.vasudev.capstone_stage_2.utils.MyStringUtils;
 
 
 public class WebViewActivity extends AppCompatActivity {
-
-    public static final String URL_TO_OPEN = "urtoop";
 
     @BindView(R.id.webView)
     WebView mWebView;
@@ -37,17 +35,12 @@ public class WebViewActivity extends AppCompatActivity {
 
     private Intent mShareIntent;
 
-    public static void startActivity(Context context, String url) {
-        Intent intent = getIntent(context, url);
-        context.startActivity(intent);
-    }
-
-    @NonNull
-    private static Intent getIntent(Context context, String url) {
+    public static void startActivity(Context context, String url, String title) {
         Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(URL_TO_OPEN, url);
+        intent.putExtra(MyIntentUtils.EXTRA_URL, url);
+        intent.putExtra(MyIntentUtils.EXTRA_TITLE, title);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return intent;
+        context.startActivity(intent);
     }
 
     @Override
@@ -61,12 +54,15 @@ public class WebViewActivity extends AppCompatActivity {
 
         setUpProgressBar();
         setUpWebView();
-        prepareShareIntent();
 
-        mUrl = getIntent().getStringExtra(URL_TO_OPEN);
+        mUrl = getIntent().getStringExtra(MyIntentUtils.EXTRA_URL);
         if (mUrl != null) {
             mWebView.loadUrl(mUrl);
         }
+
+        String title = getIntent().getStringExtra(MyIntentUtils.EXTRA_TITLE);
+        setTitle(title);
+        prepareShareIntent(title);
     }
 
     private void setUpWebView() {
@@ -78,24 +74,18 @@ public class WebViewActivity extends AppCompatActivity {
         webSettings.setSupportZoom(true);       //Zoom Control on web (You don't need this
         //if ROM supports Multi-Touch
         webSettings.setBuiltInZoomControls(true); //Enable Multitouch if supported by ROM
-        if (android.os.Build.VERSION.SDK_INT >= 11) {
-            webSettings.setDisplayZoomControls(false);
-        }
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+
         mWebView.setWebViewClient(new WebViewClient() {
-            // Override page so it's load on my view only
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 mUrl = url;
 
-                putUrlInShareIntent(url);
+//                putUrlInShareIntent(url);
 
-                WebViewActivity.this.mProgress.setVisibility(WebView.VISIBLE);
-                WebViewActivity.this.mProgress.setProgress(0);
+                mProgress.setVisibility(WebView.VISIBLE);
+                mProgress.setProgress(0);
 
                 super.onPageStarted(view, url, favicon);
             }
@@ -107,8 +97,13 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
 
-        // Setup callback support for mTitle and progress bar
-        mWebView.setWebChromeClient(new WebChrome());
+        mWebView.setWebChromeClient(new WebChromeClient() {
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                mProgress.setProgress(newProgress);
+            }
+        });
     }
 
     private void setUpProgressBar() {
@@ -116,35 +111,21 @@ public class WebViewActivity extends AppCompatActivity {
         mProgress.setMax(100);
     }
 
-    private void putUrlInShareIntent(String url) {
-        mShareIntent.removeExtra(Intent.EXTRA_TEXT);
-        mShareIntent
-                .putExtra(Intent.EXTRA_TEXT, getString(R.string.hey_checkout_reddit_post) + url);
-        mShareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.reddit_post));
-    }
-
-    private void prepareShareIntent() {
+    private void prepareShareIntent(String title) {
         mShareIntent = new Intent();
         mShareIntent.setAction(Intent.ACTION_SEND);
         mShareIntent.setType("text/plain");
-    }
-
-    class WebChrome extends WebChromeClient {
-
-        @Override
-        public void onReceivedTitle(WebView view, String title) {
-            WebViewActivity.this.setTitle(title);
-            putUrlInShareIntent(mUrl);
-        }
-
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            WebViewActivity.this.mProgress.setProgress(newProgress);
-            if (newProgress == 100) {
-                CookieSyncManager.getInstance().sync();
-            }
-        }
-
+        mShareIntent.removeExtra(Intent.EXTRA_TEXT);
+        String textToShare = new StringBuilder()
+                .append(getString(R.string.hey_checkout_reddit_post))
+                .append(MyStringUtils.NEW_LINE)
+                .append(title)
+                .append(MyStringUtils.NEW_LINE)
+                .append(mUrl).toString();
+        mShareIntent
+                .putExtra(Intent.EXTRA_TEXT,
+                        textToShare);
+        mShareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.reddit_post));
     }
 
 

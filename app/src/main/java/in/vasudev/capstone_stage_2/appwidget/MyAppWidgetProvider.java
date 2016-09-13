@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 
 import in.vasudev.capstone_stage_2.R;
-import in.vasudev.capstone_stage_2.utils.IntentUtils;
+import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 
 /**
  * Created by vineet on 11-Sep-16.
@@ -24,8 +24,9 @@ public class MyAppWidgetProvider extends AppWidgetProvider {
         if (intent.getAction().equals(OPEN_URL_ACTION)) {
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
-            String url = intent.getExtras().getString(IntentUtils.EXTRA_URL);
-            IntentUtils.openWebPage(context, url);
+            String url = intent.getExtras().getString(MyIntentUtils.EXTRA_URL);
+            String title = intent.getExtras().getString(MyIntentUtils.EXTRA_TITLE);
+            MyIntentUtils.openWebPage(context, url, title);
         }
         super.onReceive(context, intent);
     }
