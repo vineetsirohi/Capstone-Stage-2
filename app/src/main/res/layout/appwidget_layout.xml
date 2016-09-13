@@ -5,7 +5,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <!--android:id="@+id/appwidget_item_view"-->
 
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -14,12 +13,12 @@
               android:background="@color/colorPrimary"
               android:textColor="#ffffff"
               android:textSize="14sp"
-              android:paddingLeft="@dimen/left_padding"
-              android:paddingStart="@dimen/left_padding"
-              android:paddingRight="@dimen/right_padding"
-              android:paddingEnd="@dimen/right_padding"
-              android:paddingTop="16dp"
-              android:paddingBottom="16dp"
+              android:paddingLeft="@dimen/card_padding_left"
+              android:paddingStart="@dimen/card_padding_left"
+              android:paddingRight="@dimen/card_padding_right"
+              android:paddingEnd="@dimen/card_padding_right"
+              android:paddingTop="@dimen/appwidget_heading_vertical_padding"
+              android:paddingBottom="@dimen/appwidget_heading_vertical_padding"
     />
     <TextView android:id="@+id/empty_view"
               android:layout_width="match_parent"
@@ -36,13 +35,11 @@
             android:id="@+id/widget_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@null"
-            android:dividerHeight="0dp"
+            android:divider="@drawable/listdivider"
+            android:dividerHeight="1px"
             tools:listitem="@layout/list_item_appwidget"
             android:background="@color/white"
-            android:theme="@style/AppTheme"
-    >
-    </ListView>
+            android:theme="@style/AppTheme"/>
 
 
 </LinearLayout>

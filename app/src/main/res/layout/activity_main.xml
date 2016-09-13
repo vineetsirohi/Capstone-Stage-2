@@ -39,8 +39,8 @@
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingRight="@dimen/right_padding"
-                android:paddingLeft="@dimen/left_padding"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:background="#eee"/>
 
@@ -60,45 +60,3 @@
 
 
 
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-                <!--xmlns:tools="http://schemas.android.com/tools"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--tools:context=".BaseMainActivity">-->
-
-    <!--&lt;!&ndash; view for AdMob Interstitial Ad &ndash;&gt;-->
-    <!--<TextView-->
-            <!--android:id="@+id/app_title"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:text="@string/app_name"-->
-            <!--android:textAppearance="?android:attr/textAppearanceLarge"/>-->
-
-    <!--<TextView-->
-            <!--android:id="@+id/level"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:layout_below="@+id/app_title"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:text="@string/start_level"-->
-            <!--android:textAppearance="?android:attr/textAppearanceLarge"/>-->
-
-    <!--<Button-->
-            <!--android:id="@+id/next_level_button"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_below="@+id/level"-->
-            <!--android:text="@string/next_level"/>-->
-    <!--<WebView-->
-            <!--android:id="@+id/webView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:layout_below="@+id/next_level_button"-->
-            <!--android:layout_centerHorizontal="true"/>-->
-<!--</RelativeLayout>-->

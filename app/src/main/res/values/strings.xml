@@ -8,5 +8,8 @@
     <string name="action_share">Share</string>
     <string name="hey_checkout_reddit_post">Hey! Check out this cool reddit post\n\n</string>
     <string name="reddit_post">Reddit post</string>
+    <string name="thumbnail_for_the_post">Thumbnail for the post</string>
+    <string name="comments_icon">comments icon</string>
+    <string name="up_arrow_icon">up_arrow_icon</string>
 
 </resources>
