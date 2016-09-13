@@ -11,5 +11,7 @@
     <string name="thumbnail_for_the_post">Thumbnail for the post</string>
     <string name="comments_icon">comments icon</string>
     <string name="up_arrow_icon">up_arrow_icon</string>
+    <string name="action_add_subreddit">Add Subreddit</string>
+    <string name="topic">Topic</string>
 
 </resources>

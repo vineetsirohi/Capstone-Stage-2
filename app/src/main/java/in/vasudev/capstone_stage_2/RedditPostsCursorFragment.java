@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
+import in.vasudev.capstone_stage_2.model.SubredditsModel;
 import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 import in.vasudev.capstone_stage_2.utils.MyStringUtils;
@@ -63,9 +64,11 @@ public class RedditPostsCursorFragment extends Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Cursor cursor = getActivity().getContentResolver()
-                .query(SubmissionsTable.CONTENT_URI, null, null, null, null);
-        setUpAdapter(cursor);
+        if (SubredditsModel.DEFAULT_SUB_ALL.equals(mSubreddit)) {
+            Cursor cursor = getActivity().getContentResolver()
+                    .query(SubmissionsTable.CONTENT_URI, null, null, null, null);
+            setUpAdapter(cursor);
+        }
     }
 
     @Override
@@ -120,14 +123,15 @@ public class RedditPostsCursorFragment extends Fragment
                 @Override
                 public void onClick(View view) {
                     getCursor().moveToPosition((Integer) view.getTag());
-                    MyIntentUtils.openWebPage(mContext,
+
+                        MyIntentUtils.openWebPage(mContext,
                             getCursor().getString(
                                     SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)),
-                            getCursor().getString(SubmissionModel.getColumnIndex(SubmissionModel.TITLE)));
+                            getCursor().getString(
+                                    SubmissionModel.getColumnIndex(SubmissionModel.TITLE)));
                 }
             });
-            final ViewHolder vh = new ViewHolder(view);
-            return vh;
+            return new ViewHolder(view);
         }
 
         @Override

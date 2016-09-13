@@ -5,12 +5,6 @@ package in.vasudev.capstone_stage_2;
  */
 
 import net.dean.jraw.RedditClient;
-import net.dean.jraw.http.LoggingMode;
-import net.dean.jraw.http.NetworkException;
-import net.dean.jraw.http.UserAgent;
-import net.dean.jraw.http.oauth.Credentials;
-import net.dean.jraw.http.oauth.OAuthData;
-import net.dean.jraw.http.oauth.OAuthException;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
 
@@ -19,10 +13,9 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.support.v4.content.AsyncTaskLoader;
 
-import java.util.UUID;
-
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
+import in.vasudev.capstone_stage_2.model.SubredditsModel;
 
 /**
  * Created by vineet on 20/05/2015.
@@ -41,21 +34,12 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
 
     @Override
     public Cursor loadInBackground() {
-//        Credentials credentials = Credentials
-//                .installedApp(RedditCredentials.CLIENT_ID, RedditCredentials.REDIRECT_URL);
-        final RedditClient reddit = new RedditClient(
-                UserAgent.of("android:in.vasudev.capstone_stage_2:v0.1"));
-        reddit.setLoggingMode(LoggingMode.ALWAYS);
 
-        try {
-            Credentials credentials = Credentials
-                    .userlessApp(RedditCredentials.CLIENT_ID, UUID
-                            .randomUUID());
-            OAuthData authData = reddit.getOAuthHelper().easyAuth(credentials);
-            reddit.authenticate(authData);
+        RedditClient reddit = MyApp.getRedditClient();
 
+        if (reddit.isAuthenticated()) {
             SubredditPaginator listings;
-            if (mSubreddit.toLowerCase().equals("all")) {
+            if (mSubreddit.toLowerCase().equals(SubredditsModel.DEFAULT_SUB_ALL)) {
                 listings = new SubredditPaginator(reddit);
                 getContext().getContentResolver().delete(SubmissionsTable.CONTENT_URI, null, null);
             } else {
@@ -65,7 +49,7 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
             MatrixCursor matrixCursor = new MatrixCursor(SubmissionModel.COLUMNS);
             int id = 0;
             for (Submission submission : listings.next()) {
-                matrixCursor.addRow(new Object[]{id++, submission.getThumbnail(),
+                matrixCursor.addRow(new Object[]{id, submission.getThumbnail(),
                         submission.getPostHint(),
                         submission.getDomain(), submission.getTitle(),
                         submission.getSubredditName(),
@@ -77,16 +61,12 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
                 if (mSubreddit.toLowerCase().equals("all")) {
                     getContext().getContentResolver().insert(SubmissionsTable.CONTENT_URI,
                             SubmissionsTable
-                                    .getContentValues(new SubmissionModel(submission), false));
+                                    .getContentValues(new SubmissionModel(id, submission), false));
                 }
+                id++;
             }
 
             return matrixCursor;
-
-        } catch (OAuthException e) {
-            e.printStackTrace();
-        } catch (NetworkException e) {
-
         }
         return null;
     }

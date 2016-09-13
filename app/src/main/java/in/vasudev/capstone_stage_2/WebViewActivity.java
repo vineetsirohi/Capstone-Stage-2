@@ -2,12 +2,12 @@ package in.vasudev.capstone_stage_2;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -74,25 +74,13 @@ public class WebViewActivity extends AppCompatActivity {
         webSettings.setSupportZoom(true);       //Zoom Control on web (You don't need this
         //if ROM supports Multi-Touch
         webSettings.setBuiltInZoomControls(true); //Enable Multitouch if supported by ROM
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+//        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         mWebView.setWebViewClient(new WebViewClient() {
 
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                mUrl = url;
-
-//                putUrlInShareIntent(url);
-
-                mProgress.setVisibility(WebView.VISIBLE);
-                mProgress.setProgress(0);
-
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
             public void onPageFinished(WebView view, String url) {
-                WebViewActivity.this.mProgress.setVisibility(WebView.GONE);
+                mProgress.setVisibility(View.GONE);
                 super.onPageFinished(view, url);
             }
         });

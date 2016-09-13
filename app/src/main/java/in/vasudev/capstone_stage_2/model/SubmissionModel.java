@@ -81,8 +81,8 @@ public class SubmissionModel {
 
     }
 
-    public SubmissionModel(Submission submission) {
-        _id = 0;
+    public SubmissionModel(int id, Submission submission) {
+        _id = id;
         thumbnail = submission.getThumbnail();
         postHint = submission.getPostHint().name();
         domain = submission.getDomain();
