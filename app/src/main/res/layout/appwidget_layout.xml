@@ -6,20 +6,31 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <TextView android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="@string/app_name"
-              style="@style/Base.TextAppearance.AppCompat.Title"
-              android:background="@color/colorPrimary"
-              android:textColor="#ffffff"
-              android:textSize="14sp"
-              android:paddingLeft="@dimen/card_padding_left"
-              android:paddingStart="@dimen/card_padding_left"
-              android:paddingRight="@dimen/card_padding_right"
-              android:paddingEnd="@dimen/card_padding_right"
-              android:paddingTop="@dimen/appwidget_heading_vertical_padding"
-              android:paddingBottom="@dimen/appwidget_heading_vertical_padding"
-    />
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:background="@color/colorPrimary"
+                  android:orientation="horizontal">
+
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:src="@mipmap/ic_launcher"
+                   android:scaleType="centerInside"
+                   android:contentDescription="@string/app_icon"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/app_name"
+                  style="@style/Base.TextAppearance.AppCompat.Title"
+                  android:textColor="#ffffff"
+                  android:textSize="14sp"
+                  android:paddingRight="@dimen/card_padding_right"
+                  android:paddingEnd="@dimen/card_padding_right"
+                  android:paddingTop="@dimen/appwidget_heading_vertical_padding"
+                  android:paddingBottom="@dimen/appwidget_heading_vertical_padding"
+        />
+
+    </LinearLayout>
+
     <TextView android:id="@+id/empty_view"
               android:layout_width="match_parent"
               android:layout_height="match_parent"

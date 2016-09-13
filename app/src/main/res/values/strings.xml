@@ -13,5 +13,6 @@
     <string name="up_arrow_icon">up_arrow_icon</string>
     <string name="action_add_subreddit">Add Subreddit</string>
     <string name="topic">Topic</string>
+    <string name="app_icon">App icon</string>
 
 </resources>
