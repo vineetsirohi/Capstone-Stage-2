@@ -17,4 +17,10 @@
     <dimen name="stats_panel_horizontal_padding">4dp</dimen>
     <dimen name="edittext_padding">8dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="header_layout_padding_top">64dp</dimen>
+    <dimen name="header_layout_padding_bottom">16dp</dimen>
+    <dimen name="header_layout_title_padding_top">24dp</dimen>
+    <dimen name="header_layout_title_padding_to">16dp</dimen>
+    <dimen name="header_layout_title_size">24sp</dimen>
+    <dimen name="header_layout_body_textsize">16sp</dimen>
 </resources>
