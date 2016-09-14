@@ -3,10 +3,9 @@ package in.vasudev.capstone_stage_2;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -31,9 +30,13 @@ public class WebViewActivity extends AppCompatActivity {
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
 
+    @BindView(R.id.fab)
+    FloatingActionButton mFab;
+
     private String mUrl;
 
     private Intent mShareIntent;
+
 
     public static void startActivity(Context context, String url, String title) {
         Intent intent = new Intent(context, WebViewActivity.class);
@@ -63,6 +66,13 @@ public class WebViewActivity extends AppCompatActivity {
         String title = getIntent().getStringExtra(MyIntentUtils.EXTRA_TITLE);
         setTitle(title);
         prepareShareIntent(title);
+
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(mShareIntent);
+            }
+        });
     }
 
     private void setUpWebView() {
@@ -117,23 +127,23 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.web_view, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_share) {
-            startActivity(mShareIntent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.web_view, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//
+//        if (id == R.id.action_share) {
+//            startActivity(mShareIntent);
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     @Override

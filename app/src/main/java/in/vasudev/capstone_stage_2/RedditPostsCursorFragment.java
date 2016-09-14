@@ -30,6 +30,8 @@ import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
 import in.vasudev.capstone_stage_2.model.SubredditsModel;
+import in.vasudev.capstone_stage_2.ui.EndlessRecyclerViewScrollListener;
+import in.vasudev.capstone_stage_2.ui.OnRVItemClickListener;
 import in.vasudev.capstone_stage_2.utils.MyStringUtils;
 import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 

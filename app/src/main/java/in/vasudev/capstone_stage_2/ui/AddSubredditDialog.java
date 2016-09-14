@@ -1,4 +1,4 @@
-package in.vasudev.capstone_stage_2;
+package in.vasudev.capstone_stage_2.ui;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,6 +21,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import in.vasudev.capstone_stage_2.BaseMainActivity;
+import in.vasudev.capstone_stage_2.MyApp;
+import in.vasudev.capstone_stage_2.R;
 
 /**
  * Created by vineet on 13-Sep-16.

@@ -1,4 +1,4 @@
-package in.vasudev.capstone_stage_2;
+package in.vasudev.capstone_stage_2.ui;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

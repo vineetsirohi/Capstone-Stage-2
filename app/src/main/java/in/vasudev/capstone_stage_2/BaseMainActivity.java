@@ -23,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.model.SubredditsModel;
 import in.vasudev.capstone_stage_2.model.SubredditsTable;
+import in.vasudev.capstone_stage_2.ui.AddSubredditDialog;
+import in.vasudev.capstone_stage_2.ui.OnRVItemClickListener;
 import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 
 public class BaseMainActivity extends AppCompatActivity implements OnRVItemClickListener {
@@ -92,7 +94,14 @@ public class BaseMainActivity extends AppCompatActivity implements OnRVItemClick
             addSubreddit();
             return true;
         }
+        if (id == R.id.action_manage_subreddits) {
+            manageSubreddits();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void manageSubreddits() {
+        ManageSubredditsActivity.startActivity(BaseMainActivity.this);
     }
 
     private void addSubreddit() {

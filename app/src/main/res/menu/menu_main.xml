@@ -9,6 +9,12 @@
           app:icon="@drawable/ic_add_white_24dp"
           app:showAsAction="always"/>
 
+    <item android:id="@+id/action_manage_subreddits"
+          android:title="@string/action_manage_subreddits"
+          android:icon="@drawable/ic_settings_white_24dp"
+          app:icon="@drawable/ic_settings_white_24dp"
+          app:showAsAction="ifRoom"/>
+
     <!--<item android:id="@+id/action_settings"-->
           <!--android:title="@string/action_settings"-->
           <!--android:orderInCategory="100"-->

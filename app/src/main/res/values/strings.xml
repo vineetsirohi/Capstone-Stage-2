@@ -15,5 +15,10 @@
     <string name="topic">Topic</string>
     <string name="app_icon">App icon</string>
     <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+    <string name="action_manage_subreddits">Manage Subreddits</string>
+    <string name="title_activity_manage_subreddits">Manage Subreddits</string>
+    <string name="remove_subreddit">Remove subreddit</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
