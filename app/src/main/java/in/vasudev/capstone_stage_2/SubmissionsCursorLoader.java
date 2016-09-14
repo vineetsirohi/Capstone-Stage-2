@@ -5,6 +5,7 @@ package in.vasudev.capstone_stage_2;
  */
 
 import net.dean.jraw.RedditClient;
+import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
 
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
@@ -22,14 +24,21 @@ import in.vasudev.capstone_stage_2.model.SubredditsModel;
  */
 public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
 
+    private static final int MAX_POSTS_TO_SHOW = 300;
+
     private String mSubreddit;
 
     private Cursor mList;
+
+    private SubredditPaginator mListings;
+
+    private MatrixCursor mMatrixCursor;
 
 
     public SubmissionsCursorLoader(Context context, String subreddit) {
         super(context);
         mSubreddit = subreddit;
+        mMatrixCursor = new MatrixCursor(SubmissionModel.COLUMNS);
     }
 
     @Override
@@ -38,40 +47,48 @@ public class SubmissionsCursorLoader extends AsyncTaskLoader<Cursor> {
         RedditClient reddit = MyApp.getRedditClient();
 
         if (reddit.isAuthenticated()) {
-            SubredditPaginator listings;
-            if (mSubreddit.toLowerCase().equals(SubredditsModel.DEFAULT_SUB_ALL)) {
-                listings = new SubredditPaginator(reddit);
-                getContext().getContentResolver().delete(SubmissionsTable.CONTENT_URI, null, null);
-            } else {
-                listings = new SubredditPaginator(reddit, mSubreddit);
-            }
-
-            MatrixCursor matrixCursor = new MatrixCursor(SubmissionModel.COLUMNS);
-            int id = 0;
-            for (Submission submission : listings.next()) {
-                if(!submission.isNsfw()) {
-                    matrixCursor.addRow(new Object[]{id, submission.getThumbnail(),
-                            submission.getPostHint(),
-                            submission.getDomain(), submission.getTitle(),
-                            submission.getSubredditName(),
-                            submission.getCreated().getTime(), submission.getAuthor(),
-                            submission.getVote().getValue(),
-                            submission.getScore(), submission.getCommentCount(),
-                            submission.getShortURL()});
-
-                    if (mSubreddit.toLowerCase().equals("all")) {
-                        getContext().getContentResolver().insert(SubmissionsTable.CONTENT_URI,
-                                SubmissionsTable
-                                        .getContentValues(new SubmissionModel(id, submission),
-                                                false));
-                    }
-                    id++;
+            if (mListings == null) {
+                if (mSubreddit.toLowerCase().equals(SubredditsModel.DEFAULT_SUB_ALL)) {
+                    mListings = new SubredditPaginator(reddit);
+                    getContext().getContentResolver()
+                            .delete(SubmissionsTable.CONTENT_URI, null, null);
+                } else {
+                    mListings = new SubredditPaginator(reddit, mSubreddit);
                 }
             }
 
-            return matrixCursor;
+            if (mMatrixCursor.getCount() < MAX_POSTS_TO_SHOW) {
+                Listing<Submission> submissions = mListings.next();
+
+                int id = mMatrixCursor.getCount();
+                Log.d(AppConstants.LOG_TAG,
+                        "in.vasudev.capstone_stage_2.SubmissionsCursorLoader.loadInBackground"
+                                + " id: " + id
+                                + ", page: " + mListings.getPageIndex());
+
+                for (Submission submission : submissions) {
+                    if (!submission.isNsfw()) {
+                        mMatrixCursor.addRow(new Object[]{id, submission.getThumbnail(),
+                                submission.getPostHint(),
+                                submission.getDomain(), submission.getTitle(),
+                                submission.getSubredditName(),
+                                submission.getCreated().getTime(), submission.getAuthor(),
+                                submission.getVote().getValue(),
+                                submission.getScore(), submission.getCommentCount(),
+                                submission.getShortURL()});
+
+                        if (mSubreddit.toLowerCase().equals("all")) {
+                            getContext().getContentResolver().insert(SubmissionsTable.CONTENT_URI,
+                                    SubmissionsTable
+                                            .getContentValues(new SubmissionModel(id, submission),
+                                                    false));
+                        }
+                        id++;
+                    }
+                }
+            }
         }
-        return null;
+        return mMatrixCursor;
     }
 
     @Override

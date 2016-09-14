@@ -6,6 +6,7 @@ import com.squareup.picasso.Picasso;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,8 @@ public class RedditPostsCursorFragment extends Fragment
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeView;
 
+    private MyAdapter mAdapter;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +76,25 @@ public class RedditPostsCursorFragment extends Fragment
                 getLoaderManager().restartLoader(0, null, RedditPostsCursorFragment.this);
             }
         });
+
+        int columnCount = getResources().getInteger(R.integer.list_column_count);
+        StaggeredGridLayoutManager sglm =
+                new StaggeredGridLayoutManager(columnCount,
+                        StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(sglm);
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(sglm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d(AppConstants.LOG_TAG,
+                        "in.vasudev.capstone_stage_2.RedditPostsCursorFragment.onLoadMore");
+
+                getLoaderManager().getLoader(0).onContentChanged();
+            }
+        });
+        mAdapter = new MyAdapter(new MatrixCursor(SubmissionModel.COLUMNS), getActivity());
+        mAdapter.setHasStableIds(true);
+        mRecyclerView.setAdapter(mAdapter);
+
         return view;
     }
 
@@ -81,7 +104,7 @@ public class RedditPostsCursorFragment extends Fragment
         if (SubredditsModel.DEFAULT_SUB_ALL.equals(mSubreddit.toLowerCase())) {
             Cursor cursor = getActivity().getContentResolver()
                     .query(SubmissionsTable.CONTENT_URI, null, null, null, null);
-            setUpAdapter(cursor);
+            swapCursor(cursor);
         }
 
         if (isConnected()) {
@@ -127,23 +150,17 @@ public class RedditPostsCursorFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        setUpAdapter(data);
+        swapCursor(data);
         showRefreshing(false);
     }
 
-    private void setUpAdapter(Cursor cursor) {
+    private void swapCursor(Cursor cursor) {
         if (cursor == null) {
             return;
         }
 
-        RecyclerView.Adapter adapter = new MyAdapter(cursor, getActivity());
-        adapter.setHasStableIds(true);
-        mRecyclerView.setAdapter(adapter);
-        int columnCount = getResources().getInteger(R.integer.list_column_count);
-        StaggeredGridLayoutManager sglm =
-                new StaggeredGridLayoutManager(columnCount,
-                        StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(sglm);
+        mAdapter.changeCursor(cursor);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
