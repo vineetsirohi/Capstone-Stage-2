@@ -8,9 +8,14 @@ import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 /**
@@ -30,16 +35,30 @@ public class MyApp extends Application {
                 getRedditClient();
             }
         }).start();
+
+        setDataRefreshServiceToRunEveryHour();
+    }
+
+    private void setDataRefreshServiceToRunEveryHour() {
+        Calendar cal = Calendar.getInstance();
+        Intent intent = new Intent(this, RefreshDataIntentService.class);
+        PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+
+        AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 60 * 60 * 1000/*one hour*/,
+                pintent);
     }
 
 
     public synchronized static RedditClient getRedditClient() {
         if (mReddit != null && mReddit.isAuthenticated()) {
-            Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.MyApp.getRedditClient" + " reddit client authenticated");
+            Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.MyApp.getRedditClient"
+                    + " reddit client authenticated");
             return mReddit;
         }
 
-        Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.MyApp.getRedditClient" + " authenticating reddit client");
+        Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.MyApp.getRedditClient"
+                + " authenticating reddit client");
 
         //        Credentials credentials = Credentials
 //                .installedApp(RedditCredentials.CLIENT_ID, RedditCredentials.REDIRECT_URL);

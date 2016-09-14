@@ -9,8 +9,9 @@
               android:paddingBottom="@dimen/header_layout_padding_bottom">
 
     <ImageView android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:src="@mipmap/ic_launcher"/>
+               android:layout_height="144dp"
+               android:src="@drawable/app_icon_big"
+               />
 
     <TextView android:layout_width="match_parent"
               android:layout_height="wrap_content"

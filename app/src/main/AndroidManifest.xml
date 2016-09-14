@@ -30,7 +30,6 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".MainActivity"/>
         </activity>
-
         <activity
                 android:name=".ManageSubredditsActivity"
                 android:label="@string/title_activity_manage_subreddits"
@@ -59,8 +58,10 @@
                 android:name=".appwidget.AppWidgetRemoteViewsService"
                 android:exported="false"
                 android:permission="android.permission.BIND_REMOTEVIEWS"/>
-
-
+        <service
+                android:name=".RefreshDataIntentService"
+                android:exported="false">
+        </service>
     </application>
 
 </manifest>
