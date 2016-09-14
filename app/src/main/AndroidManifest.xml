@@ -33,7 +33,7 @@
         </activity>
 
         <provider
-                android:authorities="in.vasudev.capstone_stage_2.submissions_provider.authority"
+                android:authorities="${applicationId}.submissions_provider.authority"
                 android:name="in.vasudev.capstone_stage_2.model.SubmissionsProvider"
                 android:exported="true"/>
 
