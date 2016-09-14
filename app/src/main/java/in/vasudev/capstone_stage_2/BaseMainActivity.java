@@ -23,8 +23,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.model.SubredditsModel;
 import in.vasudev.capstone_stage_2.model.SubredditsTable;
+import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 
-public class BaseMainActivity extends AppCompatActivity {
+public class BaseMainActivity extends AppCompatActivity implements OnRVItemClickListener {
 
     private static final String TAG = "BaseMainActivity";
 
@@ -105,14 +106,15 @@ public class BaseMainActivity extends AppCompatActivity {
         new AddSubredditDialog().show(fragmentTransaction, D_ADD_SUB);
     }
 
-    protected void goToNextLevel() {
-//        mLevelTextView.setText(String.valueOf(++mLevel));
-    }
-
     public void reloadSubredditsList(String newSubreddit) {
         mViewPagerAdapter.addSubreddit(newSubreddit);
         mViewPagerAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(mViewPagerAdapter.getCount());
+    }
+
+    @Override
+    public void onItemClicked(String title, String url) {
+        MyIntentUtils.openWebPage(BaseMainActivity.this, url, title);
     }
 
     public static class SubredditsViewPagerAdapter extends FragmentStatePagerAdapter {

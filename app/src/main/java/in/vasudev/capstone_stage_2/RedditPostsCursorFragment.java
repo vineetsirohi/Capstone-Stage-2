@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
 import in.vasudev.capstone_stage_2.model.SubredditsModel;
-import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 import in.vasudev.capstone_stage_2.utils.MyStringUtils;
 import in.vasudev.capstone_stage_2.utils.MyTimeUtils;
 
@@ -91,7 +90,8 @@ public class RedditPostsCursorFragment extends Fragment
                 getLoaderManager().getLoader(0).onContentChanged();
             }
         });
-        mAdapter = new MyAdapter(new MatrixCursor(SubmissionModel.COLUMNS), getActivity());
+        mAdapter = new MyAdapter(new MatrixCursor(SubmissionModel.COLUMNS), getActivity(),
+                (BaseMainActivity) getActivity());
         mAdapter.setHasStableIds(true);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -168,13 +168,17 @@ public class RedditPostsCursorFragment extends Fragment
         mRecyclerView.setAdapter(null);
     }
 
-    private class MyAdapter extends RecyclerCursorAdapter<ViewHolder> {
+    private static class MyAdapter extends RecyclerCursorAdapter<ViewHolder> {
 
         private Activity mContext;
 
-        public MyAdapter(Cursor cursor, Activity context) {
+        private OnRVItemClickListener mOnRVItemClickListener;
+
+        public MyAdapter(Cursor cursor, Activity context,
+                OnRVItemClickListener onRVItemClickListener) {
             super(cursor);
             mContext = context;
+            mOnRVItemClickListener = onRVItemClickListener;
         }
 
         @Override
@@ -190,12 +194,11 @@ public class RedditPostsCursorFragment extends Fragment
                 @Override
                 public void onClick(View view) {
                     getCursor().moveToPosition((Integer) view.getTag());
-
-                    MyIntentUtils.openWebPage(mContext,
-                            getCursor().getString(
-                                    SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL)),
-                            getCursor().getString(
-                                    SubmissionModel.getColumnIndex(SubmissionModel.TITLE)));
+                    String url = getCursor().getString(
+                            SubmissionModel.getColumnIndex(SubmissionModel.SHORT_URL));
+                    String title = getCursor().getString(
+                            SubmissionModel.getColumnIndex(SubmissionModel.TITLE));
+                    mOnRVItemClickListener.onItemClicked(title, url);
                 }
             });
             return new ViewHolder(view);
