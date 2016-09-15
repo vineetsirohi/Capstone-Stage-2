@@ -22,4 +22,6 @@
     <string name="cancel">Cancel</string>
     <string name="app_description">App developed as part of Android nano-degree course. It shows reddits posts in an easy-to-view card layout. Users can add and remove subreddits that they will like to follow.</string>
 
+    <string name="accountType" translatable="false">vasudev.in.sync</string>
+
 </resources>

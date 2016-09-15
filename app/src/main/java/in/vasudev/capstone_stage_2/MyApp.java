@@ -36,7 +36,7 @@ public class MyApp extends Application {
             }
         }).start();
 
-        setDataRefreshServiceToRunEveryHour();
+//        setDataRefreshServiceToRunEveryHour();
     }
 
     private void setDataRefreshServiceToRunEveryHour() {

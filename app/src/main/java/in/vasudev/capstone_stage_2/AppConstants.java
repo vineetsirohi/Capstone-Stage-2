@@ -6,4 +6,6 @@ package in.vasudev.capstone_stage_2;
 public class AppConstants {
 
     public static final String LOG_TAG = "RedditBrowser";
+
+    public static final String CONTENT_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".submissions_provider.authority";
 }

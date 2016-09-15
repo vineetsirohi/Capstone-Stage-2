@@ -1,5 +1,8 @@
 package in.vasudev.capstone_stage_2;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -29,10 +32,20 @@ import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 
 public class BaseMainActivity extends AppCompatActivity implements OnRVItemClickListener {
 
-    private static final String TAG = "BaseMainActivity";
+    private static final String DIALOG_FRAGMENT_TAG = "dAddSub";
 
-    private static final String D_ADD_SUB = "dAddSub";
+    public static final String ACCOUNT_TYPE = "vasudev.in.sync";
 
+    public static final String ACCOUNT = "Account";
+
+    // Sync interval constants
+    public static final long SECONDS_PER_MINUTE = 60L;
+
+    public static final long SYNC_INTERVAL_IN_MINUTES = 60L;
+
+    public static final long SYNC_INTERVAL = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
+
+    //    Android views
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
 
@@ -42,7 +55,10 @@ public class BaseMainActivity extends AppCompatActivity implements OnRVItemClick
     @BindView(R.id.pager)
     ViewPager mViewPager;
 
+    //    Fields
     private SubredditsViewPagerAdapter mViewPagerAdapter;
+
+    Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +86,11 @@ public class BaseMainActivity extends AppCompatActivity implements OnRVItemClick
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
+        mAccount = createSyncAccount(this);
+        ContentResolver
+                .addPeriodicSync(mAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY, Bundle.EMPTY,
+                        SYNC_INTERVAL);
+        ContentResolver.setSyncAutomatically(mAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY, true);
     }
 
 
@@ -107,12 +128,12 @@ public class BaseMainActivity extends AppCompatActivity implements OnRVItemClick
     private void addSubreddit() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        Fragment fragment = fm.findFragmentByTag(D_ADD_SUB);
+        Fragment fragment = fm.findFragmentByTag(DIALOG_FRAGMENT_TAG);
         if (fragment != null) {
             fragmentTransaction.remove(fragment);
         }
         fragmentTransaction.addToBackStack(null);
-        new AddSubredditDialog().show(fragmentTransaction, D_ADD_SUB);
+        new AddSubredditDialog().show(fragmentTransaction, DIALOG_FRAGMENT_TAG);
     }
 
     public void reloadSubredditsList(String newSubreddit) {
@@ -124,6 +145,15 @@ public class BaseMainActivity extends AppCompatActivity implements OnRVItemClick
     @Override
     public void onItemClicked(String title, String url) {
         MyIntentUtils.openWebPage(BaseMainActivity.this, url, title);
+    }
+
+    public static Account createSyncAccount(Context context) {
+        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
+        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
+        accountManager.addAccountExplicitly(newAccount, null, null);
+        ContentResolver
+                .setSyncAutomatically(newAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY, true);
+        return newAccount;
     }
 
     public static class SubredditsViewPagerAdapter extends FragmentStatePagerAdapter {
