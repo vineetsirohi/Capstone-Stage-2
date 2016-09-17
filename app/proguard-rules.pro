@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+-dontobfuscate
+
 # picasso
 -dontwarn com.squareup.okhttp.**
 
@@ -44,10 +46,20 @@
 -dontwarn com.squareup.javapoet.**
 
 -dontwarn ckm.simple.sql_provider.processor.**
--dontwarn com.fasterxml.jackson.**
 -dontwarn org.slf4j.**
-
 -dontwarn okio.**
+
+# Proguard configuration for Jackson 2.x (fasterxml package instead of codehaus package)
+-dontwarn com.fasterxml.jackson.databind.**
+#-keep class com.fasterxml.jackson.databind.** {*;}
+#-keep class com.fasterxml.jackson.databind.ObjectMapper {
+#    public <methods>;
+#    protected <methods>;
+#}
+#-keep class com.fasterxml.jackson.databind.ObjectWriter {
+#    public ** writeValueAsString(**);
+#}
+#-keep class org.w3c.dom.bootstrap.** {*;}
 
 #jraw
 -dontwarn net.dean.**
