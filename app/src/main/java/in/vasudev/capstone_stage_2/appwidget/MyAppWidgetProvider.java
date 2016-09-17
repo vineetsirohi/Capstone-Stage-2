@@ -3,6 +3,7 @@ package in.vasudev.capstone_stage_2.appwidget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +18,13 @@ import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 public class MyAppWidgetProvider extends AppWidgetProvider {
 
     public static final String OPEN_URL_ACTION = "in.vasudev.capstone_stage_2.OPEN_URL_ACTION";
+
+    public static void updateAppWidgets(Context context) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisWidget = new ComponentName(context, MyAppWidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {

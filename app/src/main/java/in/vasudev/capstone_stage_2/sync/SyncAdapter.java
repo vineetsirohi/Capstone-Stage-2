@@ -6,9 +6,7 @@ import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
 
 import android.accounts.Account;
-import android.appwidget.AppWidgetManager;
 import android.content.AbstractThreadedSyncAdapter;
-import android.content.ComponentName;
 import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
@@ -17,7 +15,6 @@ import android.util.Log;
 
 import in.vasudev.capstone_stage_2.AppConstants;
 import in.vasudev.capstone_stage_2.MyApp;
-import in.vasudev.capstone_stage_2.R;
 import in.vasudev.capstone_stage_2.appwidget.MyAppWidgetProvider;
 import in.vasudev.capstone_stage_2.model.SubmissionModel;
 import in.vasudev.capstone_stage_2.model.SubmissionsTable;
@@ -29,12 +26,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.sync.SyncAdapter.SyncAdapter");
 
 
     }
 
     public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
+        Log.d(AppConstants.LOG_TAG,
+                "in.vasudev.capstone_stage_2.sync.SyncAdapter.SyncAdapter" + ": 2");
 
 
     }
@@ -42,6 +42,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
             ContentProviderClient provider, SyncResult syncResult) {
+
         Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.sync.SyncAdapter.onPerformSync");
 
         RedditClient reddit = MyApp.getRedditClient();
@@ -64,14 +65,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
 
-            updateAppWidgets();
+            MyAppWidgetProvider.updateAppWidgets(getContext());
         }
     }
 
-    private void updateAppWidgets() {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
-        ComponentName thisWidget = new ComponentName(getContext(), MyAppWidgetProvider.class);
-        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);
-    }
+
 }

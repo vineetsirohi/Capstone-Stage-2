@@ -7,5 +7,5 @@ public class AppConstants {
 
     public static final String LOG_TAG = "RedditBrowser";
 
-    public static final String CONTENT_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".submissions_provider.authority";
+    public static final String CONTENT_PROVIDER_AUTHORITY = BuildConfig.AUTHORITY /*+ ".submissions_provider.authority"*/;
 }

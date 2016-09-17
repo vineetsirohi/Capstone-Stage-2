@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import in.vasudev.capstone_stage_2.appwidget.MyAppWidgetProvider;
 import in.vasudev.capstone_stage_2.model.SubredditsModel;
 import in.vasudev.capstone_stage_2.model.SubredditsTable;
 import in.vasudev.capstone_stage_2.ui.AddSubredditDialog;
@@ -33,8 +35,6 @@ import in.vasudev.capstone_stage_2.utils.MyIntentUtils;
 public class BaseMainActivity extends AppCompatActivity implements OnRVItemClickListener {
 
     private static final String DIALOG_FRAGMENT_TAG = "dAddSub";
-
-    public static final String ACCOUNT_TYPE = "vasudev.in.sync";
 
     public static final String ACCOUNT = "Account";
 
@@ -87,12 +87,22 @@ public class BaseMainActivity extends AppCompatActivity implements OnRVItemClick
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         mAccount = createSyncAccount(this);
+        if (ContentResolver.isSyncPending(mAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY)  ||
+                ContentResolver.isSyncActive(mAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY)) {
+            Log.i("ContentResolver", "SyncPending, canceling");
+            ContentResolver.cancelSync(mAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY);
+        }
         ContentResolver
                 .addPeriodicSync(mAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY, Bundle.EMPTY,
                         SYNC_INTERVAL);
         ContentResolver.setSyncAutomatically(mAccount, AppConstants.CONTENT_PROVIDER_AUTHORITY, true);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MyAppWidgetProvider.updateAppWidgets(BaseMainActivity.this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -148,7 +158,7 @@ public class BaseMainActivity extends AppCompatActivity implements OnRVItemClick
     }
 
     public static Account createSyncAccount(Context context) {
-        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
+        Account newAccount = new Account(ACCOUNT, context.getString(R.string.account_type));
         AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
         accountManager.addAccountExplicitly(newAccount, null, null);
         ContentResolver

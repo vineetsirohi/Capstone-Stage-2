@@ -39,5 +39,3 @@ captures/
 # Keystore files
 *.jks
 
-# Project files
-app/src/main/java/in/vasudev/capstone_stage_2/RedditCredentials.java

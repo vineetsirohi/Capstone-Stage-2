@@ -6,6 +6,9 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+
+import in.vasudev.capstone_stage_2.AppConstants;
 
 /**
  * Created by vineet on 15-Sep-16.
@@ -15,6 +18,9 @@ public class Authenticator extends AbstractAccountAuthenticator {
     // Simple constructor
     public Authenticator(Context context) {
         super(context);
+        Log.d(AppConstants.LOG_TAG,
+                "in.vasudev.capstone_stage_2.sync.Authenticator.Authenticator" + ": ");
+
     }
 
     @Override

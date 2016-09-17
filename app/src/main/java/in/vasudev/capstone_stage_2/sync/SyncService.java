@@ -3,6 +3,9 @@ package in.vasudev.capstone_stage_2.sync;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
+
+import in.vasudev.capstone_stage_2.AppConstants;
 
 public class SyncService extends Service {
 
@@ -16,6 +19,8 @@ public class SyncService extends Service {
 
     @Override
     public void onCreate() {
+        Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.sync.SyncService.onCreate");
+
         // Singleton
         synchronized (sSyncAdapterLock) {
             if (sSyncAdapter == null) {
@@ -26,6 +31,8 @@ public class SyncService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(AppConstants.LOG_TAG, "in.vasudev.capstone_stage_2.sync.SyncService.onBind");
+
         return sSyncAdapter.getSyncAdapterBinder();
     }
 }

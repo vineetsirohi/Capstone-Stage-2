@@ -15,3 +15,41 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# picasso
+-dontwarn com.squareup.okhttp.**
+
+# ButterKnife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+# Play Services
+-dontnote com.google.android.gms.**
+
+-dontnote com.google.common.util.concurrent.**
+-dontwarn android.support.v7.**
+-keep class android.support.v7.** { *; }
+-keep interface android.support.v7.** { *; }
+-dontwarn com.google.common.**
+-dontwarn android.support.**
+-dontwarn com.squareup.javapoet.**
+
+-dontwarn ckm.simple.sql_provider.processor.**
+-dontwarn com.fasterxml.jackson.**
+-dontwarn org.slf4j.**
+
+-dontwarn okio.**
+
+#jraw
+-dontwarn net.dean.**
+-keep class net.dean.** {*;}
+

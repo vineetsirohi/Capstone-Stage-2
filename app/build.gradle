@@ -11,18 +11,25 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+        buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+        //Reference them in .xml files.
+        resValue "string", "account_type", "${applicationId}.account"
+        resValue "string", "authority", "${applicationId}.provider"
     }
     signingConfigs {
         releaseConfig {
-            storeFile file("C:/Users/vineet/androidapkkeys")
-            storePassword rootProject.storePassword
-            keyAlias rootProject.keyAlias
-            keyPassword rootProject.keyPassword
+            storeFile file("../nanokeystore.jks")
+            storePassword "123456"
+            keyAlias "keystore"
+            keyPassword "123456"
         }
     }
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
+
         }
         release {
             minifyEnabled true
@@ -34,9 +41,21 @@ android {
     productFlavors {
         free {
             applicationId "in.vasudev.capstone_stage_2.free"
+
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+            //Reference them in .xml files.
+            resValue "string", "account_type", "${applicationId}.account"
+            resValue "string", "authority", "${applicationId}.provider"
         }
         paid {
             applicationId "in.vasudev.capstone_stage_2.paid"
+
+            buildConfigField "String", "ACCOUNT_TYPE", "\"${applicationId}.account\""
+            buildConfigField "String", "AUTHORITY", "\"${applicationId}.provider\""
+            //Reference them in .xml files.
+            resValue "string", "account_type", "${applicationId}.account"
+            resValue "string", "authority", "${applicationId}.provider"
         }
     }
 }
